@@ -1,0 +1,18 @@
+services:
+  redis:
+    image: redis:7
+    ports:
+      - "6380:6379"
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: demo
+    # binlog 直连失效要求：log_bin 开启 + ROW 格式（binlog_row_image 默认 FULL，8.x 无需额外配置）
+    command: mysqld --log-bin=mysql-bin --binlog-format=ROW --server-id=1
+    ports:
+      - "3308:3306"
+    volumes:
+      # 首次启动自动建表并写入种子数据
+      - ./init:/docker-entrypoint-initdb.d

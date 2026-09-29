@@ -1,0 +1,32 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: cache-kit-sample
+  datasource:
+    # docker-compose 映射的 3308（避免与本地 3307 容器冲突，可改回 3307）
+    url: jdbc:mysql://localhost:3308/demo?serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+  data:
+    redis:
+      # docker-compose 映射的 6380（避免与本地 6379 容器冲突，可改回 6379）
+      host: localhost
+      port: 6380
+      timeout: 2s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+
+cache-kit:
+  l1:
+    ttl: 30s
+  l2:
+    ttl: 10m
+  binlog:
+    enabled: true
+    server-id: 9001
